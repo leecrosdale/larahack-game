@@ -981,13 +981,19 @@ __webpack_require__(11);
 
 window.Vue = __webpack_require__(35);
 
+window.axios.defaults.headers.common = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(38));
+// Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('map-component', __webpack_require__(38));
 
 var app = new Vue({
   el: '#app'
@@ -42920,7 +42926,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\ExampleComponent.vue"
+Component.options.__file = "resources\\assets\\js\\components\\MapComponent.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -42929,9 +42935,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0ca92eac", Component.options)
+    hotAPI.createRecord("data-v-62ccd510", Component.options)
   } else {
-    hotAPI.reload("data-v-0ca92eac", Component.options)
+    hotAPI.reload("data-v-62ccd510", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -43072,11 +43078,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
-        console.log('Component mounted.');
+        this.getMapData();
+    },
+    data: function data() {
+        return {
+            map_data: null,
+            x: 0,
+            y: 0,
+            city: null
+        };
+    },
+
+    props: ['map_id'],
+    computed: {
+        checkPlayerLocation: function checkPlayerLocation() {
+            if (this.x > 5) {
+                return getMapData();
+            }
+        }
+    },
+    methods: {
+        getMapData: function getMapData() {
+            var self = this;
+            axios.get('/map/' + this.map_id + '/data').then(function (response) {
+                self.map_data = response.data;
+                console.log("Got data");
+            });
+        }
     }
+
 });
 
 /***/ }),
@@ -43087,38 +43130,62 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Example Component")
-            ]),
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }, [
+            _vm._v(_vm._s(_vm.map_id))
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c(
+              "table",
+              {
+                staticStyle: { color: "white", "text-align": "center" },
+                attrs: { border: "1" }
+              },
+              _vm._l(_vm.map_data, function(y, index) {
+                return _c(
+                  "tr",
+                  { key: "map_data-" + index },
+                  _vm._l(y, function(x, bindex) {
+                    return _c(
+                      "td",
+                      {
+                        key: "map_data-" + bindex,
+                        style: { "background-color": x.background.color },
+                        attrs: { width: "64", height: "64" }
+                      },
+                      [_vm._v(_vm._s(x.tile.x) + " - " + _vm._s(x.tile.y))]
+                    )
+                  })
+                )
+              })
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "panel-body" }, [
-              _vm._v(
-                "\n                    I'm an example component!\n                "
-              )
-            ])
+            _c("hr"),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-success" }, [_vm._v("North")]),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-success" }, [_vm._v("East")]),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-success" }, [_vm._v("South")]),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-success" }, [_vm._v("West")])
           ])
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-0ca92eac", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-62ccd510", module.exports)
   }
 }
 
