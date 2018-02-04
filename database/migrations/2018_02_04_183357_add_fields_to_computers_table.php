@@ -17,6 +17,7 @@ class AddFieldsToComputersTable extends Migration
             $table->integer('security')->unsigned()->default(1);
             $table->integer('health')->unsigned()->default(100);
             $table->integer('max_health')->unsigned()->default(100);
+            $table->tinyInteger('begin')->unsigned()->default(1);
         });
     }
 

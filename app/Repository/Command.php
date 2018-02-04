@@ -9,6 +9,7 @@
 namespace App\Repository;
 
 use App\Computer;
+use App\Connection;
 use App\Lockout;
 use App\TerminalLine;
 use App\User;
@@ -23,7 +24,10 @@ class Command
         '/help',
         '/hello', // TODO
         '/scan',
-        '/attack'
+        '/attack',
+        '/location', // TODO
+        '/ip',
+        '/connections'
     ];
 
     private $command;
@@ -102,9 +106,8 @@ class Command
         return ['status' => $status, 'status_text' => $status_message];
     }
 
-    protected function doAttack($device, $computer) {
+    protected function checkLockout($device, $computer) {
 
-        // Check that computer is not locked out from device.
         $lockout = Lockout::where('device_id', $device->id)->where('device_type', get_class($device))->where('computer_id', $computer->id)->where('updated_at', '>=', Carbon::now()->addMinutes(-5)->toDateTimeString())->first();
 
         if ($lockout) {
@@ -117,6 +120,7 @@ class Command
                 $lockout->attempts = $lockout->attempts + 1;
                 $lockout->save();
             }
+
         } else {
 
             Lockout::create([
@@ -126,6 +130,36 @@ class Command
             ]);
 
         }
+
+        return false;
+
+    }
+
+    protected function checkConnection($computer) {
+
+        $connections = Auth::user()->connections()->where('computer_id', $computer->id)->where('status',0)->first();
+
+        if ($computer->security == 0 && !$connections) {
+            \App\Helpers\Connection::createConnection(Auth::user(), $computer);
+            return true;
+        } else if ($computer->security == 0 || $connections) {
+            $connections->status = 1;
+            $connections->save();
+            return true;
+        }
+
+        return false;
+
+
+
+    }
+
+    protected function doAttack($device, $computer) {
+
+        // Check that computer is not locked out from device.
+       $lockedOut = $this->checkLockout($device,$computer);
+       if ($lockedOut !== false) { return $lockedOut; }
+
 
         $damage = ($computer->gpu + $computer->ram) + $computer->hdd * $computer->cpu;
 
@@ -158,9 +192,46 @@ class Command
 
         if ($count > 0) {
             // Connecting to IP
-            // TODO Connect to IP
 
-        } else {
+            $ip = $this->command[1];
+            $computer = Computer::where('ip', $ip)->first();
+            $status_text = 'Unable to connect. Check that your computer is in range of the target computer';
+            $networks = $this->getNetworks();
+
+            foreach ($networks as $network) {
+
+                $connectedComputer = $network->computers()->where('computer_id', $computer->id)->first();
+                if ($connectedComputer) {
+
+                    // Check you aren't already connected / Get that connection
+                    $connections = Auth::user()->connections()->where('computer_id', $connectedComputer->id)->where('status',0)->first();
+
+                    // Check computer security is 0.
+                    $createdNewConnection = $this->checkConnection($connectedComputer, $connections);
+
+                    if ($createdNewConnection) {
+
+                        // End old connection.
+                        $conn = $this->connection;
+                        $conn->status = 0;
+                        $conn->save();
+
+                        $this->connection = $connections;
+
+                    }
+
+
+
+
+                    return $this->status('You have connected to ' . $connectedComputer->ip . ' - Type /disconnect to go back to your main computer');
+
+                    } else {
+                        return $this->status(' You are already connected to this computer.');
+                    }
+
+
+                }
+            } else {
             // Connecting to network
             $network = $this->getNetworks()->where('name', $this->command[1])->first();
 
@@ -209,7 +280,7 @@ class Command
             } else {
 
                 foreach ($networks as $network) {
-                    $connectedComputer = $network->computers()->where('computer_id', '!=', $computer->id)->first();
+                    $connectedComputer = $network->computers()->where('computer_id', $computer->id)->first();
 
                     if ($connectedComputer) {
                         return $this->status($this->doAttack($connectedComputer, $this->connection->computer));
@@ -302,7 +373,59 @@ class Command
         }
 
         return $this->status($status_text);
+    }
 
+    private function hello() {
+        return $this->status('Hey!');
+    }
+
+    private function disconnect() {
+
+        $computer = Auth::user()->defaultComputer;
+
+        if ($this->connection->computer->id == $computer->id) {
+            return $this->status("You can't disconnect from your default computer");
+        }
+
+        $connections = Auth::user()->connections()->where('computer_id', $computer->id)->where('status',0)->first();
+
+        $this->checkConnection($computer, $connections);
+
+        $oldConn = $this->connection;
+        $oldConn->status = 0;
+        $oldConn->save();
+
+        $status = $this->status('You have disconnected from ' . $this->connection->computer->ip . ' and re-connected to your default ip (' . $computer->ip . ')');
+
+        $this->connection = $connections;
+
+        return $status;
+
+    }
+
+    private function ip() {
+        return $this->status("The IP of this computer is: " . $this->connection->computer->ip);
+    }
+
+    private function location() {
+        $tile = $this->connection->computer->tile;
+
+        return $this->status('Physical location of this device is x:' . $tile->x . " - y:" . $tile->y );
+
+    }
+
+    private function connections() {
+
+        $connections = $this->connection->computer->connections;
+        $text = 'Current connections to ' . $this->connection->computer->ip . ' are: ';
+
+        foreach ($connections as $connection) {
+            $text .= '[' . $connection->user->name . "], ";
+        }
+
+        $text = rtrim( $text, ', ');
+
+        return $this->status($text);
     }
 
 }
