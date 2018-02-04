@@ -43090,6 +43090,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -43120,6 +43133,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.map_data = response.data;
                 console.log("Got data");
             });
+        },
+        checkSize: function checkSize(tile, size) {
+            return tile.users.length > size;
         },
         movePlayer: function movePlayer(direction) {
             //console.log("Move player " + direction);
@@ -43180,8 +43196,18 @@ var render = function() {
                       [
                         x.tile.location
                           ? _c("i", { staticClass: "fas fa-home" })
-                          : _vm._e()
-                      ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.checkSize(x.tile, 0)
+                          ? [_c("img", { attrs: { src: "images/player.png" } })]
+                          : _vm._e(),
+                        _vm._v(
+                          "\n\n                                " +
+                            _vm._s(x.tile.users.length) +
+                            "\n\n\n\n\n                            "
+                        )
+                      ],
+                      2
                     )
                   })
                 )

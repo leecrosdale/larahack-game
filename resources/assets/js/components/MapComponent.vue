@@ -9,6 +9,19 @@
                             <tr v-for="(y, index) in map_data" :key="`map_data-${index}`">
                                 <td width="64" height="64" v-for="(x, bindex) in y" :key="`map_data-${bindex}`" :style="{ 'background-color': x.background.color }">
                                     <i v-if="x.tile.location" class="fas fa-home"></i>
+
+                                    <!--<i v-if="checkSize(x.tile,1)" class="fas fa-users"></i>-->
+
+
+                                    <template v-if="checkSize(x.tile,0)">
+                                        <img src="images/player.png" />
+                                    </template>
+
+                                    {{ x.tile.users.length }}
+
+
+
+
                                 </td>
                             </tr>
                         </table>
@@ -57,6 +70,9 @@
                         console.log("Got data");
                     });
             },
+            checkSize(tile, size) {
+                return tile.users.length > size;
+            },
             movePlayer(direction) {
                 //console.log("Move player " + direction);
 
@@ -70,6 +86,7 @@
                     self.getMapData();
                     console.log("Moved Player " + direction );
                     console.log(response.data)
+
                 });
 
                 // re-enable buttons
