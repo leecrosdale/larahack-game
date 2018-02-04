@@ -25,13 +25,20 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('player/move/{direction}', 'UserController@move'); // Move the player
     Route::get('player/terminal/lines', 'UserController@getTerminalLines');
     Route::post('player/command', 'UserController@command'); // Command
-
+    Route::get('player', 'UserController@getPlayer');
 
     Route::get('test', function() {
 
-        $device = get_class(\App\Computer::first());
+        $game = new \App\Repository\Command();
 
-        dd($device);
+
+
+
+
+        return $game->getPrices($game->getUpgrades(), \App\Computer::find(1)->first());
+
+
+
 
     });
 

@@ -5,10 +5,9 @@
                 <div class="panel-heading">Terminal</div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="terminal" style="height:100px;"><img src="images/larahack-os.png"/></div>
+                        <div class="terminal" style="min-height:10px; height:100px;"><img src="images/larahack-os.png"/></div>
                         <div class="terminal col-md-12">
-
-                            <div class="row" v-for="(line, index) in lines"><b>{{ line.message_key }} </b> {{ line.message_value }}</div>
+                            <div class="row" v-for="(line, index) in lines" v-html="line.message_value" ><b>{{ line.message_key }} </b></div>
 
                         </div>
                     </div>

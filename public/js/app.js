@@ -43118,10 +43118,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
         this.getMapData();
+        this.updatePlayer();
     },
     data: function data() {
         return {
@@ -43130,21 +43132,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             y: 0,
             city: null,
             moving: false,
-            terminal_open: true
+            terminal_open: false,
+            player: null
         };
     },
 
     props: ['map_id', 'map_name'],
+    computed: {
+        onShop: function onShop() {
+            if (this.player) {
+                if (this.player.tile.location) {
+                    return this.player.tile.location.location_type === 0;
+                }
+            }
+            return false;
+        },
+        onHouse: function onHouse() {
+            if (this.player) {
+                if (this.player.tile.location) {
+                    return this.player.tile.location.location_type === 1;
+                }
+            }
+            return false;
+        }
+    },
     methods: {
+        enterShop: function enterShop() {
+            this.terminal_open = true;
+        },
         getMapData: function getMapData() {
             var self = this;
             axios.get('/map/' + this.map_id + '/data').then(function (response) {
                 self.map_data = response.data;
                 console.log("Got data");
+                self.updatePlayer();
+            });
+        },
+        updatePlayer: function updatePlayer() {
+
+            var self = this;
+            axios.get('/player').then(function (response) {
+                self.player = response.data;
+                console.log("Got player data");
+                console.log(response.data);
             });
         },
         checkSize: function checkSize(tile, size) {
             return tile.users.length > size;
+        },
+        getName: function getName(location_type) {
+
+            switch (location_type) {
+                case 1:
+                    return 'fas fa-home';
+                case 0:
+                    return 'fas fa-shopping-basket';
+
+            }
         },
         openTerminal: function openTerminal() {
             this.terminal_open = !this.terminal_open;
@@ -43181,9 +43225,19 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
         _c("div", { staticClass: "panel panel-default" }, [
-          _c("div", { staticClass: "panel-heading" }, [
-            _vm._v(_vm._s(_vm.map_name))
-          ]),
+          _vm.player !== null
+            ? _c("div", { staticClass: "panel-heading" }, [
+                _vm._v(
+                  _vm._s(_vm.map_name) +
+                    " - Cash: £" +
+                    _vm._s(_vm.player.cash) +
+                    " - X: " +
+                    _vm._s(_vm.player.tile.x) +
+                    " - Y: " +
+                    _vm._s(_vm.player.tile.y)
+                )
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "panel-body" }, [
             _c(
@@ -43214,7 +43268,9 @@ var render = function() {
                       },
                       [
                         x.tile.location
-                          ? _c("i", { staticClass: "fas fa-home" })
+                          ? _c("i", {
+                              class: _vm.getName(x.tile.location.location_type)
+                            })
                           : _vm._e(),
                         _vm._v(" "),
                         _vm.checkSize(x.tile, 0)
@@ -43261,6 +43317,37 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("hr"),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.openTerminal()
+                  }
+                }
+              },
+              [_vm._v("Toggle Terminal")]
+            ),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c(
+              "h1",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ]
+              },
+              [_vm._v("Actions")]
+            ),
             _vm._v(" "),
             _c(
               "button",
@@ -43350,32 +43437,6 @@ var render = function() {
               [_vm._v("Right")]
             ),
             _vm._v(" "),
-            _c("hr", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: !_vm.terminal_open,
-                  expression: "!terminal_open"
-                }
-              ]
-            }),
-            _vm._v(" "),
-            _c(
-              "h1",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.terminal_open,
-                    expression: "!terminal_open"
-                  }
-                ]
-              },
-              [_vm._v("Build")]
-            ),
-            _vm._v(" "),
             _c(
               "button",
               {
@@ -43383,19 +43444,14 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: !_vm.terminal_open,
-                    expression: "!terminal_open"
+                    value: _vm.onShop && !_vm.terminal_open,
+                    expression: "onShop && !terminal_open"
                   }
                 ],
                 staticClass: "btn btn-success",
-                attrs: { disabled: _vm.moving },
-                on: {
-                  click: function($event) {
-                    _vm.movePlayer("west")
-                  }
-                }
+                on: { click: _vm.enterShop }
               },
-              [_vm._v("House (Cost)")]
+              [_vm._v("Enter Shop")]
             ),
             _vm._v(" "),
             _c(
@@ -43405,55 +43461,13 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: !_vm.terminal_open,
-                    expression: "!terminal_open"
+                    value: _vm.onHouse && !_vm.terminal_open,
+                    expression: "onHouse && !terminal_open"
                   }
                 ],
-                staticClass: "btn btn-success",
-                attrs: { disabled: _vm.moving },
-                on: {
-                  click: function($event) {
-                    _vm.movePlayer("west")
-                  }
-                }
+                staticClass: "btn btn-success"
               },
-              [_vm._v("Shop (Cost)")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.terminal_open,
-                    expression: "!terminal_open"
-                  }
-                ],
-                staticClass: "btn btn-success",
-                attrs: { disabled: _vm.moving },
-                on: {
-                  click: function($event) {
-                    _vm.movePlayer("west")
-                  }
-                }
-              },
-              [_vm._v("Network (Cost)")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger",
-                attrs: { disabled: _vm.moving },
-                on: {
-                  click: function($event) {
-                    _vm.openTerminal()
-                  }
-                }
-              },
-              [_vm._v("Toggle Terminal")]
+              [_vm._v("Enter House (Coming Soon)")]
             )
           ])
         ])
@@ -43565,7 +43579,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -43624,10 +43637,14 @@ var render = function() {
               "div",
               { staticClass: "terminal col-md-12" },
               _vm._l(_vm.lines, function(line, index) {
-                return _c("div", { staticClass: "row" }, [
-                  _c("b", [_vm._v(_vm._s(line.message_key) + " ")]),
-                  _vm._v(" " + _vm._s(line.message_value))
-                ])
+                return _c(
+                  "div",
+                  {
+                    staticClass: "row",
+                    domProps: { innerHTML: _vm._s(line.message_value) }
+                  },
+                  [_c("b", [_vm._v(_vm._s(line.message_key) + " ")])]
+                )
               })
             )
           ]),
@@ -43689,7 +43706,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "terminal", staticStyle: { height: "100px" } },
+      {
+        staticClass: "terminal",
+        staticStyle: { "min-height": "10px", height: "100px" }
+      },
       [_c("img", { attrs: { src: "images/larahack-os.png" } })]
     )
   }

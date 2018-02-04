@@ -44,6 +44,15 @@ class UserController extends Controller
 
     }
 
+    public function getPlayer() {
+
+        $user = Auth::user();
+        $user->tile;
+        $user->tile->location;
+
+        return $user;
+    }
+
     public function command(Request $request) {
 
         $command = $request->input('command');

@@ -30,7 +30,10 @@ class Command
         '/ip',
         '/connections',
         '/install',
-        '/networks'
+        '/networks',
+        '/shop',
+        '/upgrade',
+        '/specs'
     ];
 
     private $command;
@@ -181,6 +184,14 @@ class Command
             return 'Security Level: ' . $device->security . " - Firewall Status: " . $device->health . "/" . $device->max_health;
         }
 
+    }
+
+    public function getUpgrades() {
+        return ['hdd' => 10, 'gpu' => 50, 'cpu' => 18, 'ram' => 20];
+    }
+
+    public function getPrices($upgrades, $computer) {
+        return view('terminal.prices', ['upgrades' => $upgrades, 'computer' => $computer]);
     }
 
     // TERMINAL COMMANDS DO NOT ADD NON COMMANDS BELOW HERE -------------------------------
@@ -452,6 +463,65 @@ class Command
 
 
     }
+
+    private function shop() {
+
+        $location = Auth::user()->tile->location;
+        if ($location) {
+
+            if ($location->location_type == 0) {
+
+                $upgrades = $this->getUpgrades();
+                $computer = $this->connection->computer;
+
+                return $this->status('Type /upgrade to buy upgrade level by 1. Prices: ' . $this->getPrices($upgrades, $computer));
+            }
+        }
+
+        return $this->status('Enter a shop tile in order to upgrade');
+
+    }
+
+
+    private function specs() {
+        $computer = $this->connection->computer;
+        return $this->status('CPU: ' . $computer->cpu . ", GPU: " . $computer->gpu . ", HDD: " . $computer->hdd . ", RAM: " . $computer->ram);
+    }
+
+
+    private function upgrade() {
+
+        // Possible upgrades:
+
+        $upgrades = $this->getUpgrades();
+
+        $upgrade = $this->command[1];
+
+        if (array_key_exists($upgrade,$upgrades)) {
+
+            $computer = $this->connection->computer;
+
+            $cost = $upgrades[$upgrade] * $computer->{$upgrade};
+
+            $user = Auth::user();
+            if ($user->cash > $cost) {
+
+                $user->cash = $user->cash - $cost;
+                $user->save();
+                $computer->{$upgrade} = $computer->{$upgrade} + 1;
+                $computer->save();
+
+                return $this->status('Upgraded ' . $upgrade . " Level: " . $computer->{$upgrade} );
+
+            } else {
+                return $this->status("You have " . $user->cash . " but you need " . $cost . " to make this upgrade." );
+            }
+        }
+
+        return $this->status('Type /shop to see prices. Upgrades available: ' . implode(', ', array_keys($upgrades)));
+
+    }
+
 
     private function install() {
 
