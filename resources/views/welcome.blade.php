@@ -1,4 +1,4 @@
-{{--Thanks to everyone who took part in larahack.com, I'm truely humbled.--}}
+{{--Thanks to everyone who took part in larahack.com, I'm truely humbled. Lee.--}}
 
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
