@@ -1,3 +1,5 @@
+{{--Thanks to everyone who took part in larahack.com, I'm truely humbled.--}}
+
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
     <head>
