@@ -17,6 +17,7 @@ class CreateNetworksTable extends Migration
             $table->increments('id');
             $table->string('name',30);
             $table->integer('tile_id')->unsigned();
+            $table->tinyInteger('status')->unsigned()->default(1);
             $table->timestamps();
 
             $table->foreign('tile_id')->references('id')->on('tiles');

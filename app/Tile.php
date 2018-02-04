@@ -17,6 +17,10 @@ class Tile extends Model
         return $this->hasOne('App\Location');
     }
 
+    public function networks() {
+        return $this->hasMany('App\Network');
+    }
+
     public function users() {
         return $this->hasMany('App\User');
     }

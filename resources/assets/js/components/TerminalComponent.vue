@@ -18,11 +18,6 @@
                         </div>
                         <div class="col-md-2 col-sm-10 btn btn-success" v-on:click="executeCommand">Send</div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1"><br/><br/>
-                            <button class=" form-control btn btn-danger">Close Terminal</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

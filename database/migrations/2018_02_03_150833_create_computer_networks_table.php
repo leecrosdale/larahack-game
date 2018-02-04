@@ -13,7 +13,7 @@ class CreateComputerNetworksTable extends Migration
      */
     public function up()
     {
-        Schema::create('computer_networks', function (Blueprint $table) {
+        Schema::create('computer_network', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('computer_id')->unsigned();
             $table->integer('network_id')->unsigned();
@@ -32,6 +32,6 @@ class CreateComputerNetworksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('computer_networks');
+        Schema::dropIfExists('computer_network');
     }
 }

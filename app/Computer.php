@@ -23,4 +23,12 @@ class Computer extends Model
         return $this->hasOne('App\Connection')->where('user_id', Auth::user()->id);
     }
 
+    public function tile() {
+        return $this->belongsTo('App\Tile');
+    }
+
+    public function networks() {
+        return $this->belongsToMany('App\Network');
+    }
+
 }

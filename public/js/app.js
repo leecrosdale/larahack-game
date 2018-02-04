@@ -43132,13 +43132,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     props: ['map_id', 'map_name'],
-    computed: {
-        checkPlayerLocation: function checkPlayerLocation() {
-            if (this.x > 5) {
-                return getMapData();
-            }
-        }
-    },
     methods: {
         getMapData: function getMapData() {
             var self = this;
@@ -43151,7 +43144,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return tile.users.length > size;
         },
         openTerminal: function openTerminal() {
-            this.terminal_open = true;
+            this.terminal_open = !this.terminal_open;
         },
         movePlayer: function movePlayer(direction) {
             //console.log("Move player " + direction);
@@ -43224,10 +43217,21 @@ var render = function() {
                         _vm.checkSize(x.tile, 0)
                           ? [_c("img", { attrs: { src: "images/player.png" } })]
                           : _vm._e(),
-                        _vm._v(
-                          "\n\n                                " +
-                            _vm._s(x.tile.users.length) +
-                            "\n\n\n\n\n                            "
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: x.tile.users.length > 0,
+                                expression: "x.tile.users.length > 0"
+                              }
+                            ],
+                            staticStyle: { position: "absolute" }
+                          },
+                          [_vm._v(_vm._s(x.tile.users.length))]
                         )
                       ],
                       2
@@ -43343,6 +43347,32 @@ var render = function() {
               [_vm._v("West")]
             ),
             _vm._v(" "),
+            _c("hr", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !_vm.terminal_open,
+                  expression: "!terminal_open"
+                }
+              ]
+            }),
+            _vm._v(" "),
+            _c(
+              "h1",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ]
+              },
+              [_vm._v("Build")]
+            ),
+            _vm._v(" "),
             _c(
               "button",
               {
@@ -43354,6 +43384,64 @@ var render = function() {
                     expression: "!terminal_open"
                   }
                 ],
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("west")
+                  }
+                }
+              },
+              [_vm._v("House (Cost)")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("west")
+                  }
+                }
+              },
+              [_vm._v("Shop (Cost)")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("west")
+                  }
+                }
+              },
+              [_vm._v("Network (Cost)")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
                 staticClass: "btn btn-danger",
                 attrs: { disabled: _vm.moving },
                 on: {
@@ -43362,7 +43450,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Open Terminal")]
+              [_vm._v("Toggle Terminal")]
             )
           ])
         ])
@@ -43449,11 +43537,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
 //
 //
 //
@@ -43590,9 +43673,7 @@ var render = function() {
               },
               [_vm._v("Send")]
             )
-          ]),
-          _vm._v(" "),
-          _vm._m(1)
+          ])
         ])
       ])
     ])
@@ -43608,21 +43689,6 @@ var staticRenderFns = [
       { staticClass: "terminal", staticStyle: { height: "100px" } },
       [_c("img", { attrs: { src: "images/larahack-os.png" } })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
-        _c("br"),
-        _c("br"),
-        _vm._v(" "),
-        _c("button", { staticClass: " form-control btn btn-danger" }, [
-          _vm._v("Close Terminal")
-        ])
-      ])
-    ])
   }
 ]
 render._withStripped = true

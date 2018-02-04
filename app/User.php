@@ -44,8 +44,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Computer');
     }
 
-    public function beginComputer() {
-        return $this->hasOne('App\Computer')->where('begin',1);
+    public function activeComputer() {
+        return $this->hasOne('App\Computer')->where('active',1);
     }
 
 }

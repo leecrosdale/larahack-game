@@ -5,24 +5,15 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ map_name }}</div>
                     <div class="panel-body">
-
-
-
                         <table v-show="!terminal_open" border="1" style="color:white; text-align:center">
                             <tr v-for="(y, index) in map_data" :key="`map_data-${index}`">
                                 <td width="64" height="64" v-for="(x, bindex) in y" :key="`map_data-${bindex}`" :style="{ 'background-color': x.background.color }">
                                     <i v-if="x.tile.location" class="fas fa-home"></i>
-
-                                    <!--<i v-if="checkSize(x.tile,1)" class="fas fa-users"></i>-->
-
-
                                     <template v-if="checkSize(x.tile,0)">
                                         <img src="images/player.png" />
                                     </template>
 
-                                    {{ x.tile.users.length }}
-
-
+                                    <p style="position:absolute" v-show="x.tile.users.length > 0">{{ x.tile.users.length }}</p>
 
 
                                 </td>
@@ -40,7 +31,16 @@
                         <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('south')">South</button>
                         <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('west')">West</button>
 
-                        <button class="btn btn-danger" :disabled="moving" v-show="!terminal_open" v-on:click="openTerminal()">Open Terminal</button>
+                        <hr v-show="!terminal_open"/>
+
+                        <h1 v-show="!terminal_open">Build</h1>
+
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('west')">House (Cost)</button>
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('west')">Shop (Cost)</button>
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('west')">Network (Cost)</button>
+
+
+                        <button class="btn btn-danger" :disabled="moving" v-on:click="openTerminal()">Toggle Terminal</button>
 
 
                     </div>
@@ -66,13 +66,6 @@
             }
         },
         props: ['map_id','map_name'],
-        computed: {
-            checkPlayerLocation() {
-                if (this.x > 5) {
-                    return getMapData();
-                }
-            }
-        },
         methods: {
             getMapData() {
                 var self = this;
@@ -86,7 +79,7 @@
                 return tile.users.length > size;
             },
             openTerminal() {
-              this.terminal_open = true;
+              this.terminal_open = !this.terminal_open;
             },
             movePlayer(direction) {
                 //console.log("Move player " + direction);
@@ -103,8 +96,6 @@
 
                 // re-enable buttons
                 this.moving = false;
-
-
 
             }
 
