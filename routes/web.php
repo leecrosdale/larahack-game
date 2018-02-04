@@ -26,4 +26,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('player/terminal/lines', 'UserController@getTerminalLines');
     Route::post('player/command', 'UserController@command'); // Command
 
+
+    Route::get('test', function() {
+
+        $device = get_class(\App\Computer::first());
+
+        dd($device);
+
+    });
+
 });

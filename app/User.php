@@ -19,6 +19,15 @@ class User extends Authenticatable
         'name', 'email', 'password','tile_id'
     ];
 
+    private $statuses = [
+        'closed',
+        'open'
+    ];
+
+    public function getStatus() {
+        return $this->statuses[$this->status];
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
