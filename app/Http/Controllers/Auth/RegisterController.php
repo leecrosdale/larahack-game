@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Computer;
+use App\Helpers\Ip;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -63,7 +64,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $tile = \App\Tile::get()->random(1)->first();
+        $tile = \App\Tile::where('tile_type', '!=', 0)->get()->random(1)->first();
 
         $user = User::create([
             'name' => $data['name'],
@@ -75,7 +76,7 @@ class RegisterController extends Controller
 
         $computer = Computer::create([
             'user_id' => $user->id,
-            'ip' => '',
+            'ip' => Ip::generateIP(),
             'ram' => 1.00,
             'cpu' => 1.00,
             'hdd' => 1.00,
