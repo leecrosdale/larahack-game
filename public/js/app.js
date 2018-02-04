@@ -43663,7 +43663,10 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Type commands here" },
+                attrs: {
+                  type: "text",
+                  placeholder: "Type commands here e.g /help"
+                },
                 domProps: { value: _vm.command },
                 on: {
                   keyup: function($event) {

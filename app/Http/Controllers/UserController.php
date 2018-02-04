@@ -24,6 +24,12 @@ class UserController extends Controller
                 $user->tile_id = $newTile->id;
                 $user->save();
 
+                // Update active computer to that too.
+                $connection = Auth::user()->connection;
+                $connection->computer->tile_id = $newTile->id;
+                $connection->save();
+
+
                 return response()->json(['ok']);
 
             } else {

@@ -13,7 +13,7 @@
                     </div>
                     <div class="row"> <br/>
                         <div class="col-md-10">
-                            <input class="form-control" type="text" v-on:keyup.enter="executeCommand" v-model="command" placeholder="Type commands here" />
+                            <input class="form-control" type="text" v-on:keyup.enter="executeCommand" v-model="command" placeholder="Type commands here e.g /help" />
                         </div>
                         <div class="col-md-2 col-sm-10 btn btn-success" v-on:click="executeCommand">Send</div>
                     </div>

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Computer extends Model
 {
+    protected $fillable = ['user_id', 'ip', 'ram', 'cpu', 'hdd', 'gpu', 'online', 'begin', 'active', 'tile_id','security','max_health','health'];
+
     public function user() {
         return $this->belongsTo('App\User');
     }

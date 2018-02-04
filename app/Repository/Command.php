@@ -187,7 +187,7 @@ class Command
     }
 
     public function getUpgrades() {
-        return ['hdd' => 10, 'gpu' => 50, 'cpu' => 18, 'ram' => 20];
+        return ['hdd' => 10, 'gpu' => 50, 'cpu' => 18, 'ram' => 20, 'security'=>1000];
     }
 
     public function getPrices($upgrades, $computer) {
@@ -509,6 +509,12 @@ class Command
                 $user->cash = $user->cash - $cost;
                 $user->save();
                 $computer->{$upgrade} = $computer->{$upgrade} + 1;
+
+                if ($upgrade == 'security') {
+                    $computer->max_health = $computer->max_health * $computer->security;
+                    $computer->health = $computer->max_health * $computer->security;
+                }
+
                 $computer->save();
 
                 return $this->status('Upgraded ' . $upgrade . " Level: " . $computer->{$upgrade} );
