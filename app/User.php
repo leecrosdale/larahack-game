@@ -32,4 +32,20 @@ class User extends Authenticatable
         return $this->belongsTo('App\Tile');
     }
 
+    public function connection() {
+        return $this->hasOne('App\Connection')->where('status',1);
+    }
+
+    public function connections() {
+        return $this->hasMany('App\Connection');
+    }
+
+    public function computers() {
+        return $this->hasMany('App\Computer');
+    }
+
+    public function beginComputer() {
+        return $this->hasOne('App\Computer')->where('begin',1);
+    }
+
 }

@@ -994,6 +994,7 @@ window.axios.defaults.headers.common = {
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('map-component', __webpack_require__(38));
+Vue.component('terminal-component', __webpack_require__(53));
 
 var app = new Vue({
   el: '#app'
@@ -43103,6 +43104,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -43114,11 +43126,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             x: 0,
             y: 0,
             city: null,
-            moving: false
+            moving: false,
+            terminal_open: true
         };
     },
 
-    props: ['map_id'],
+    props: ['map_id', 'map_name'],
     computed: {
         checkPlayerLocation: function checkPlayerLocation() {
             if (this.x > 5) {
@@ -43137,9 +43150,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         checkSize: function checkSize(tile, size) {
             return tile.users.length > size;
         },
+        openTerminal: function openTerminal() {
+            this.terminal_open = true;
+        },
         movePlayer: function movePlayer(direction) {
             //console.log("Move player " + direction);
-
 
             // first disable buttons
             this.moving = true;
@@ -43171,13 +43186,21 @@ var render = function() {
       _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
         _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-heading" }, [
-            _vm._v(_vm._s(_vm.map_id))
+            _vm._v(_vm._s(_vm.map_name))
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "panel-body" }, [
             _c(
               "table",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
                 staticStyle: { color: "white", "text-align": "center" },
                 attrs: { border: "1" }
               },
@@ -43214,11 +43237,35 @@ var render = function() {
               })
             ),
             _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.terminal_open,
+                    expression: "terminal_open"
+                  }
+                ]
+              },
+              [_c("terminal-component")],
+              1
+            ),
+            _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
             _c(
               "button",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
                 staticClass: "btn btn-success",
                 attrs: { disabled: _vm.moving },
                 on: {
@@ -43233,6 +43280,14 @@ var render = function() {
             _c(
               "button",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
                 staticClass: "btn btn-success",
                 attrs: { disabled: _vm.moving },
                 on: {
@@ -43247,6 +43302,14 @@ var render = function() {
             _c(
               "button",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
                 staticClass: "btn btn-success",
                 attrs: { disabled: _vm.moving },
                 on: {
@@ -43261,6 +43324,14 @@ var render = function() {
             _c(
               "button",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
                 staticClass: "btn btn-success",
                 attrs: { disabled: _vm.moving },
                 on: {
@@ -43270,6 +43341,28 @@ var render = function() {
                 }
               },
               [_vm._v("West")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
+                staticClass: "btn btn-danger",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.openTerminal()
+                  }
+                }
+              },
+              [_vm._v("Open Terminal")]
             )
           ])
         ])
@@ -43292,6 +43385,254 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(39)
+/* script */
+var __vue_script__ = __webpack_require__(54)
+/* template */
+var __vue_template__ = __webpack_require__(55)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\TerminalComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-62a906fa", Component.options)
+  } else {
+    hotAPI.reload("data-v-62a906fa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        console.log("Mounted Terminal");
+        this.getLines();
+    },
+    data: function data() {
+        return {
+            lines: null,
+            command: null
+        };
+    },
+
+    methods: {
+        getLines: function getLines() {
+            var self = this;
+
+            console.log("Getting lines");
+            axios.get('/player/terminal/lines').then(function (response) {
+                self.lines = response.data;
+                console.log("Got terminal lines");
+            });
+        },
+        executeCommand: function executeCommand() {
+
+            var self = this;
+
+            axios.post('/player/command', { command: this.command }).then(function (response) {
+                console.log("Executed Command");
+                console.log(response.data);
+                self.getLines();
+                self.command = '';
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-md-12" }, [
+      _c("div", { staticClass: "panel panel-default" }, [
+        _c("div", { staticClass: "panel-heading" }, [_vm._v("Terminal")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _c("div", { staticClass: "row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "terminal col-md-12" },
+              _vm._l(_vm.lines, function(line, index) {
+                return _c("div", { staticClass: "row" }, [
+                  _c("b", [_vm._v(_vm._s(line.message_key) + " ")]),
+                  _vm._v(" " + _vm._s(line.message_value))
+                ])
+              })
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("br"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-10" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.command,
+                    expression: "command"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Type commands here" },
+                domProps: { value: _vm.command },
+                on: {
+                  keyup: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key)
+                    ) {
+                      return null
+                    }
+                    _vm.executeCommand($event)
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.command = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "col-md-2 col-sm-10 btn btn-success",
+                on: { click: _vm.executeCommand }
+              },
+              [_vm._v("Send")]
+            )
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "terminal", staticStyle: { height: "100px" } },
+      [_c("img", { attrs: { src: "images/larahack-os.png" } })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("br"),
+        _c("br"),
+        _vm._v(" "),
+        _c("button", { staticClass: " form-control btn btn-danger" }, [
+          _vm._v("Close Terminal")
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-62a906fa", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

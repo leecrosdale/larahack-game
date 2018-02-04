@@ -24,6 +24,7 @@ window.axios.defaults.headers.common = {
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('map-component', require('./components/MapComponent.vue'));
+Vue.component('terminal-component', require('./components/TerminalComponent.vue'));
 
 const app = new Vue({
     el: '#app'
