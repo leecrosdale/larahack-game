@@ -11,11 +11,11 @@ class ComputerSoftware extends Model
     protected $table = 'computer_software';
 
     public function computer() {
-        return $this->hasOne('App\Computer');
+        return $this->belongsTo('App\Computer');
     }
 
     public function software() {
-        return $this->hasOne('App\Software');
+        return $this->belongsTo('App\Software');
     }
 
     public function user() {

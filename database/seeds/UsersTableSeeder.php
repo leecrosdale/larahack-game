@@ -16,8 +16,8 @@ class UsersTableSeeder extends Seeder
         if ($tile) {
 
             \App\User::create([
-                'name' => 'HackerMan',
-                'email' => 'lee@lee2.com',
+                'name' => 'Crosdale',
+                'email' => 'lee@larahack.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('secret'),
                 'tile_id' => $tile->id,
             ]);

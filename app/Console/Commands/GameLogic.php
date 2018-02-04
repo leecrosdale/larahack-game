@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Repository\Game;
 use Illuminate\Console\Command;
 
 class GameLogic extends Command
@@ -11,14 +12,14 @@ class GameLogic extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'game:run';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Runs the game logic';
 
     /**
      * Create a new command instance.
@@ -37,6 +38,9 @@ class GameLogic extends Command
      */
     public function handle()
     {
-        //
+        $game = new Game();
+        $game->run();
+
+
     }
 }

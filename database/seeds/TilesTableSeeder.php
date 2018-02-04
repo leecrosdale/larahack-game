@@ -13,7 +13,7 @@ class TilesTableSeeder extends Seeder
     {
         //$city = \App\City::get()->random(1)->first();
 
-        $city = \App\City::findOrFail(2);
+        $city = \App\City::findOrFail(1);
 
         if ($city) {
 
