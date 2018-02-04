@@ -29,7 +29,8 @@ class Command
         '/location', // TODO
         '/ip',
         '/connections',
-        '/install'
+        '/install',
+        '/networks'
     ];
 
     private $command;
@@ -142,8 +143,8 @@ class Command
         $connections = Auth::user()->connections()->where('computer_id', $computer->id)->where('status',0)->first();
 
         if ($computer->security == 0 && !$connections) {
-            \App\Helpers\Connection::createConnection(Auth::user(), $computer);
-            return true;
+            $connection = \App\Helpers\Connection::createConnection(Auth::user(), $computer);
+            return $connection;
         } else if ($computer->security == 0 || $connections) {
             $connections->status = 1;
             $connections->save();
@@ -196,20 +197,29 @@ class Command
             // Connecting to IP
 
             $ip = $this->command[1];
+
             $computer = Computer::where('ip', $ip)->first();
             $status_text = 'Unable to connect. Check that your computer is in range of the target computer';
-            $networks = $this->getNetworks();
+            $networks = $computer->networks;
 
             foreach ($networks as $network) {
 
+                // Check that the connecting user, is also connected to that network.
+                $userConnected = $this->connection->computer->networks()->where('id', $network->id);
                 $connectedComputer = $network->computers()->where('computer_id', $computer->id)->first();
-                if ($connectedComputer) {
+
+                if ($connectedComputer && $userConnected) {
 
                     // Check you aren't already connected / Get that connection
                     $connections = Auth::user()->connections()->where('computer_id', $connectedComputer->id)->where('status',0)->first();
 
                     // Check computer security is 0.
                     $createdNewConnection = $this->checkConnection($connectedComputer, $connections);
+
+                    if ($createdNewConnection !== true && $createdNewConnection !== false) {
+                        $connections = $createdNewConnection;
+                        $createdNewConnection = true;
+                    }
 
                     if ($createdNewConnection) {
 
@@ -222,13 +232,10 @@ class Command
 
                     }
 
-
-
-
                     return $this->status('You have connected to ' . $connectedComputer->ip . ' - Type /disconnect to go back to your main computer');
 
                     } else {
-                        return $this->status(' You are already connected to this computer.');
+                        return $this->status('You are out of range.');
                     }
 
 
@@ -430,9 +437,29 @@ class Command
         return $this->status($text);
     }
 
+    private function networks() {
+
+        $networks = $this->connection->computer->networks;
+        $text = 'Current connections to networks are: ';
+
+        foreach ($networks as $network) {
+            $text .= '[' . $network->name . "], ";
+        }
+
+        $text = rtrim( $text, ', ');
+
+        return $this->status($text);
+
+
+    }
+
     private function install() {
 
-        $software = Software::where('name', $this->command[1])->first();
+        if (isset($this->command[1])) {
+            $software = Software::where('name', $this->command[1])->first();
+        }else {
+            $software = false;
+        }
 
         if ($software) {
             $done = \App\Helpers\Software::installSoftware($software, $this->connection->computer, Auth::user());
@@ -441,8 +468,17 @@ class Command
             } else {
                 return $this->status('Software already installed');
             }
-        }
+        } else {
 
-        return $this->status('Software not available');
+            $text = 'type /install {name} to install. Software available: [';
+            foreach (Software::all() as $item) {
+                $text .= $item->name . "],[ ";
+            }
+
+            $text = rtrim( $text, ',[ ');
+
+            return $this->status($text);
+
+        }
     }
 }
