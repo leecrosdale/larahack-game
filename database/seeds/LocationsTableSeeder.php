@@ -11,7 +11,7 @@ class LocationsTableSeeder extends Seeder
      */
     public function run()
     {
-        $city = \App\City::findOrFail(2);
+        $city = \App\City::findOrFail(1);
 
         $tiles = $city->tiles()->where('tile_type', '!=', 0)->inRandomOrder()->take(300)->get();
 
