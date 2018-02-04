@@ -11,6 +11,7 @@ namespace App\Repository;
 use App\Computer;
 use App\Connection;
 use App\Lockout;
+use App\Software;
 use App\TerminalLine;
 use App\User;
 use Carbon\Carbon;
@@ -27,7 +28,8 @@ class Command
         '/attack',
         '/location', // TODO
         '/ip',
-        '/connections'
+        '/connections',
+        '/install'
     ];
 
     private $command;
@@ -428,4 +430,19 @@ class Command
         return $this->status($text);
     }
 
+    private function install() {
+
+        $software = Software::where('name', $this->command[1])->first();
+
+        if ($software) {
+            $done = \App\Helpers\Software::installSoftware($software, $this->connection->computer, Auth::user());
+            if ($done) {
+                return $this->status('Software Installed');
+            } else {
+                return $this->status('Software already installed');
+            }
+        }
+
+        return $this->status('Software not available');
+    }
 }

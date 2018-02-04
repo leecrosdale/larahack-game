@@ -61,4 +61,8 @@ class User extends Authenticatable
         return $this->hasOne('App\Computer')->where('active',1);
     }
 
+    public function computerSoftware() {
+        return $this->hasMany('App\ComputerSoftware');
+    }
+
 }

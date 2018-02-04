@@ -31,4 +31,8 @@ class Computer extends Model
         return $this->belongsToMany('App\Network');
     }
 
+    public function software() {
+        return $this->belongsToMany('App\Software');
+    }
+
 }
