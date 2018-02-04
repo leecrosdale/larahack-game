@@ -21,4 +21,20 @@ class Tile extends Model
         return $this->hasMany('App\User');
     }
 
+    public function north() {
+        return Tile::where('y', $this->y - 1)->where('x', $this->x)->where('city_id', $this->city_id)->where('tile_type', '!=', 0);
+    }
+
+    public function south() {
+        return Tile::where('y', $this->y + 1)->where('x', $this->x)->where('city_id', $this->city_id)->where('tile_type', '!=', 0);
+    }
+
+    public function west() {
+        return Tile::where('x', $this->x - 1)->where('y', $this->y)->where('city_id', $this->city_id)->where('tile_type', '!=', 0);
+    }
+
+    public function east() {
+        return Tile::where('x', $this->x + 1)->where('y', $this->y)->where('city_id', $this->city_id)->where('tile_type', '!=', 0);
+    }
+
 }

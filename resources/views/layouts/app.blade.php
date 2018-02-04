@@ -14,6 +14,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script type="text/javascript" src="{{ asset('js/app.css') }}"></script>
 
+    <script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
 
 </head>
 <body>

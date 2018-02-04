@@ -36,10 +36,10 @@ class Map
 
             if (!$tile->users()->get()->isEmpty()) {
                 $background = 'red';
+
+
             } else {
-
                 $background = $backgroundcolors[$tile->tile_type];
-
             }
 
             $data[$tile->y][$tile->x] = ['tile' => $tile, 'location' => $tile->location, 'players' => $tile->users, 'background' => ['color' => $background]];

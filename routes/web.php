@@ -21,5 +21,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('map/{city_id}/data', 'MapController@getMapData' );
+
+    Route::get('map/{city_id}/data', 'MapController@getMapData' ); // Load the map
+    Route::get('player/move/{direction}', 'UserController@move'); // Move the player
+
+
+
 });

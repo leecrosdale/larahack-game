@@ -43088,6 +43088,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -43098,7 +43100,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             map_data: null,
             x: 0,
             y: 0,
-            city: null
+            city: null,
+            moving: false
         };
     },
 
@@ -43117,6 +43120,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.map_data = response.data;
                 console.log("Got data");
             });
+        },
+        movePlayer: function movePlayer(direction) {
+            //console.log("Move player " + direction);
+
+
+            // first disable buttons
+            this.moving = true;
+            var self = this;
+            // move player
+            axios.get('/player/move/' + direction).then(function (response) {
+                self.getMapData();
+                console.log("Moved Player " + direction);
+                console.log(response.data);
+            });
+
+            // re-enable buttons
+            this.moving = false;
         }
     }
 
@@ -43157,7 +43177,11 @@ var render = function() {
                         style: { "background-color": x.background.color },
                         attrs: { width: "64", height: "64" }
                       },
-                      [_vm._v(_vm._s(x.tile.x) + " - " + _vm._s(x.tile.y))]
+                      [
+                        x.tile.location
+                          ? _c("i", { staticClass: "fas fa-home" })
+                          : _vm._e()
+                      ]
                     )
                   })
                 )
@@ -43166,13 +43190,61 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _c("button", { staticClass: "btn btn-success" }, [_vm._v("North")]),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("north")
+                  }
+                }
+              },
+              [_vm._v("North")]
+            ),
             _vm._v(" "),
-            _c("button", { staticClass: "btn btn-success" }, [_vm._v("East")]),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("east")
+                  }
+                }
+              },
+              [_vm._v("East")]
+            ),
             _vm._v(" "),
-            _c("button", { staticClass: "btn btn-success" }, [_vm._v("South")]),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("south")
+                  }
+                }
+              },
+              [_vm._v("South")]
+            ),
             _vm._v(" "),
-            _c("button", { staticClass: "btn btn-success" }, [_vm._v("West")])
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("west")
+                  }
+                }
+              },
+              [_vm._v("West")]
+            )
           ])
         ])
       ])
