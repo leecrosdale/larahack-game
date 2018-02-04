@@ -26,10 +26,13 @@
                         </div>
 
                         <hr/>
-                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('north')">North</button>
-                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('east')">East</button>
-                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('south')">South</button>
-                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('west')">West</button>
+
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('north')">Up</button>
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('south')">Down</button>
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('west')">Left</button>
+                        <button class="btn btn-success" v-show="!terminal_open" :disabled="moving" v-on:click="movePlayer('east')">Right</button>
+
+
 
                         <hr v-show="!terminal_open"/>
 

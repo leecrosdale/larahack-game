@@ -43115,6 +43115,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -43278,29 +43281,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("North")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.terminal_open,
-                    expression: "!terminal_open"
-                  }
-                ],
-                staticClass: "btn btn-success",
-                attrs: { disabled: _vm.moving },
-                on: {
-                  click: function($event) {
-                    _vm.movePlayer("east")
-                  }
-                }
-              },
-              [_vm._v("East")]
+              [_vm._v("Up")]
             ),
             _vm._v(" "),
             _c(
@@ -43322,7 +43303,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("South")]
+              [_vm._v("Down")]
             ),
             _vm._v(" "),
             _c(
@@ -43344,7 +43325,29 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("West")]
+              [_vm._v("Left")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.terminal_open,
+                    expression: "!terminal_open"
+                  }
+                ],
+                staticClass: "btn btn-success",
+                attrs: { disabled: _vm.moving },
+                on: {
+                  click: function($event) {
+                    _vm.movePlayer("east")
+                  }
+                }
+              },
+              [_vm._v("Right")]
             ),
             _vm._v(" "),
             _c("hr", {

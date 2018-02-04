@@ -333,7 +333,7 @@ class Command
 
         $networks = $this->getNetworks();
         if ($networks->isEmpty()) {
-            $status_text = 'No Networks found';
+            $status_text = 'No Networks found, check you are in range';
         } else {
 
             switch ($this->command[1]) {
