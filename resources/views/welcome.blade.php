@@ -91,7 +91,7 @@
                 <div class="links">
                     <h2>Top Hackers:</h2>
 
-                    @foreach(\App\User::orderBy('cash')->limit(10)->get() as $user)
+                    @foreach(\App\User::orderBy('cash','desc')->limit(10)->get() as $user)
 
                         {{ $loop->iteration - 1 }} : {{ $user->name }} - {{ $user->cash }} <br/>
 
