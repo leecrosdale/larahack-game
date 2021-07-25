@@ -16,7 +16,7 @@ class AddFieldsToNetworks extends Migration
         Schema::table('networks', function (Blueprint $table) {
             $table->integer('health')->unsigned()->default(100);
             $table->integer('max_health')->unsigned()->default(100);
-            $table->integer('security')->unsigned();
+            $table->integer('security')->unsigned()->nullable();
         });
     }
 
